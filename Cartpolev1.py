@@ -20,6 +20,7 @@ model.compile(
     metrics=["accuracy"])
 
 env=gym.make("CartPole-v1",new_step_api=True)
+env.reset()
 
 def RandomAgent(obs):
   return env.action_space.sample()
