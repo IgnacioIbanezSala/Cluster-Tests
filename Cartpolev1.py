@@ -4,6 +4,7 @@ from tensorflow.keras  import Sequential
 import numpy as np
 import matplotlib.pyplot as plt
 import gymnasium as gym
+import pickle as pkl
 
 
 HIDDEN_SIZE = 128
@@ -12,6 +13,8 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 #tf.debugging.set_log_device_placement(True)
 
+data_to_dump = {}
+data_to_dump["Mean Return"] = []
 # Neuronal Net
 model = Sequential([
                     Dense(HIDDEN_SIZE,activation="relu"),
@@ -59,7 +62,7 @@ for j in range(50):
 
       n+=1
       trajectories.append(trajectory)
-    #print('iteration',j,'episode',e,'Return =',len(trajectory))
+    print('iteration',j,'episode',e,'Return =',len(trajectory))
   # Looking index for trayectory wiht maximun return R
   Ri=np.zeros(len(trajectories))
   for i,trajectory in enumerate(trajectories):
@@ -69,8 +72,13 @@ for j in range(50):
   # Training
   X=np.array([s for s,a,r in trajectories[i]])
   y=np.array([a for s,a,r in trajectories[i]])
+  data_to_dump["Mean Return"].append(Ri.mean())
 
 #print(n,len(S))
+model.save("my_model.keras")
+
+with open('Mean_returns.pickle', 'wb') as handle:
+    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
 
 one=False
 trunc=True
