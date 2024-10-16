@@ -73,6 +73,8 @@ for j in range(50):
   X=np.array([s for s,a,r in trajectories[i]])
   y=np.array([a for s,a,r in trajectories[i]])
   data_to_dump["Mean Return"].append(Ri.mean())
+  with open('Mean_returns.pickle', 'wb') as handle:
+    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
 
 #print(n,len(S))
 model.save("my_model.keras")

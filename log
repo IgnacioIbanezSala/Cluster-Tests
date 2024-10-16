@@ -1,0 +1,17 @@
+Num GPUs Available:  1
+iteration 0 states visited 186 Mean Return = 19.15909090909091
+iteration 1 states visited 501 Mean Return = 37.59672131147541
+iteration 2 states visited 1343 Mean Return = 115.40384615384616
+iteration 3 states visited 3119 Mean Return = 205.81540203850508
+iteration 4 states visited 5485 Mean Return = 249.94482173174873
+iteration 5 states visited 8086 Mean Return = 276.7591663450405
+iteration 6 states visited 11364 Mean Return = 352.7992656058752
+iteration 7 states visited 14965 Mean Return = 387.01336675020883
+iteration 8 states visited 19232 Mean Return = 451.98191214470285
+iteration 9 states visited 23330 Mean Return = 419.956457925636
+iteration 10 states visited 28340 Mean Return = 500.0
+iteration 11 states visited 33350 Mean Return = 500.0
+iteration 12 states visited 38360 Mean Return = 500.0
+iteration 13 states visited 43370 Mean Return = 500.0
+iteration 14 states visited 48372 Mean Return = 499.21153846153845
+iteration 15 states visited 52725 Mean Return = 445.56919180290123
