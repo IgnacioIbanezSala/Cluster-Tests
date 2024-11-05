@@ -1,19 +1,23 @@
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras  import Sequential
 import numpy as np
 import matplotlib.pyplot as plt
-import gym
+import gymnasium as gym
+import pickle as pkl
 
-
-
-env=gym.make("CartPole-v1",new_step_api=True)
+env=gym.make("CartPole-v1")
 
 def RandomAgent(obs):
   return env.action_space.sample()
 
 def ReinforceAgent(obs):
   prob=Reinforce_Net(obs.reshape(1,4))
+  #print("--",prob,prob.numpy())
   a=np.random.choice(2,p=prob.numpy().reshape(2))
   return a
 
@@ -27,53 +31,31 @@ Reinforce_Net = Sequential([
                     Dense(2,activation='softmax')
 ])
 
-# Collect data
-trajectories=[]
-episodes=10
-for _ in range(episodes):
-  done=False
-  obs=env.reset()
-  trajectory=[]
-  while(not done):
-    action=ReinforceAgent(obs)
-    n_obs,r,done,trunc,info = env.step(action)
-    trajectory.append((obs,action,r))
-    obs=n_obs
-    if trunc:
-      print('error : anomaly output')
-      break
-  trajectories.append(trajectory)
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-# Looking index for trayectory wiht maximun return R
-Ri=np.zeros(len(trajectories))
-for i,trajectory in enumerate(trajectories):
-  Ri[i]=len(trajectory)
-i=np.argmax(Ri)
+#tf.debugging.set_log_device_placement(True)
 
-Ri,Ri[i]
+data_to_dump = {}
+data_to_dump["Mean Return"] = []
 
-X=np.array([s for s,a,r in trajectories[i]])
-actions=np.array([a for s,a,r in trajectories[i]])
-rewards=np.array([r for s,a,r in trajectories[i]])
-
-
-
-G_acc=[]
-for it in range(100):
+n=0
+for it in range(10000):
     # Collect data
     trajectories=[]
     episodes=10
+    if n >=3 : break
     for _ in range(episodes):
       done=False
-      obs=env.reset()
+      obs=env.reset()[0]
       trajectory=[]
       while(not done):
         action=ReinforceAgent(obs)
-        n_obs,r,done,trunc,info = env.step(action)
+        new_obs,r,done,trunc,info = env.step(action)
         trajectory.append((obs,action,r))
-        obs=n_obs
+        obs=new_obs
         if trunc:
-          print('error : anomaly output')
+          print('500 Steps!')
+          n+=1
           break
       trajectories.append(trajectory)
 
@@ -112,7 +94,11 @@ for it in range(100):
       Reinforce_Net.set_weights(w)
       #print('G=',G,', a=',actions[t],', old_step=',old_step.numpy()[0],', new_step=',Reinforce_Net(x.reshape(1,4)).numpy()[0])
     #print(len(trajectories[i]))
-    G_acc.append(len(trajectories[i]))
-plt.plot(G_acc)
-plt.show()
+    data_to_dump["Mean Return"].append(Ri.mean())
+
+Reinforce_Net.save("Reinforce_model.keras")
+
+with open('Mean_returns_Reinforce.pickle', 'wb') as handle:
+    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
+
 

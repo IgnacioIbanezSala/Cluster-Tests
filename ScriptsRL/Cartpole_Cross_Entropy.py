@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import gymnasium as gym
 import pickle as pkl
 import random
+from PickleSaver import PickleSaver
 
 SEED = 0
 def set_seeds(seed=SEED):
@@ -46,6 +47,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 data_to_dump = {}
 data_to_dump["Mean Return"] = []
+pklsave = PickleSaver("Cartpole_Cross_Entropy","../PickleFiles/")
 # Neuronal Net
 model = Sequential([
                     Dense(HIDDEN_SIZE,activation="relu"),
@@ -105,12 +107,13 @@ for j in range(5):
   y=np.array([a for s,a,r in trajectories[i]])
   history = model.fit(X, y, epochs=100, verbose=0)
   data_to_dump["Mean Return"].append(Ri.mean())
-  with open('Mean_returns.pickle', 'wb') as handle:
-    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
+  pklsave.save_data("Mean Return", Ri.mean())
+  #with open('Mean_returns.pickle', 'wb') as handle:
+  #  pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
 
 print(n,len(S))
 model.save("my_model.keras")
 
-with open('Mean_returns.pickle', 'wb') as handle:
-    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
+#with open('Mean_returns.pickle', 'wb') as handle:
+#    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
 
