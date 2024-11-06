@@ -73,6 +73,7 @@ for it in range(10000):
 
     # training
     lr=0.001
+    pklsave.save_data("Learning Rate", lr)
     gamma=1
     for t,x  in enumerate(X):
       old_step=Reinforce_Net(x.reshape(1,4))

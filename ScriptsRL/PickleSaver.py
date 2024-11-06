@@ -11,6 +11,7 @@ class PickleSaver:
         self.info["Mean Return"] = []
         self.info["Net Params"] = {}
         self.info["Time Mark"] = 0
+        self.info["Learning Rate"] = 0
 
     
     def save_data(self, key, data):
