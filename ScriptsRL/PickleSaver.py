@@ -10,6 +10,7 @@ class PickleSaver:
         self.info = {}
         self.info["Mean Return"] = []
         self.info["Net Params"] = {}
+        self.info["Time Mark"] = 0
 
     
     def save_data(self, key, data):
@@ -17,5 +18,8 @@ class PickleSaver:
         with open(self.filename, 'wb+') as handle:
             pkl.dump(self.info, handle, protocol=pkl.HIGHEST_PROTOCOL)
     
-
+    def save_time_mark(self, time):
+        self.info["Time Mark"] = time
+        with open(self.filename, 'wb+') as handle:
+            pkl.dump(self.info, handle, protocol=pkl.HIGHEST_PROTOCOL)
         

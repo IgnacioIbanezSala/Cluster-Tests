@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gymnasium as gym
 import pickle as pkl
+from PickleSaver import PickleSaver
 
 env=gym.make("CartPole-v1")
 
@@ -35,6 +36,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 #tf.debugging.set_log_device_placement(True)
 
+pklsave = PickleSaver("ReinforceCartpole")
 data_to_dump = {}
 data_to_dump["Mean Return"] = []
 
@@ -94,11 +96,11 @@ for it in range(10000):
       Reinforce_Net.set_weights(w)
       #print('G=',G,', a=',actions[t],', old_step=',old_step.numpy()[0],', new_step=',Reinforce_Net(x.reshape(1,4)).numpy()[0])
     #print(len(trajectories[i]))
-    data_to_dump["Mean Return"].append(Ri.mean())
+    pklsave.save_data("Mean Return", Ri.mean())
+
 
 Reinforce_Net.save("Reinforce_model.keras")
 
-with open('Mean_returns_Reinforce.pickle', 'wb') as handle:
-    pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
+
 
 
