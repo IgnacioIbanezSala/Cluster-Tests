@@ -72,8 +72,8 @@ for it in range(10000):
     rewards=np.array([r for s,a,r in trajectories[i]])
 
     # training
-    lr=0.001
-    pklsave.save_data("Learning Rate", lr)
+    lr=0.00005
+    pklsave.save_int("Learning Rate", lr)
     gamma=1
     for t,x  in enumerate(X):
       old_step=Reinforce_Net(x.reshape(1,4))

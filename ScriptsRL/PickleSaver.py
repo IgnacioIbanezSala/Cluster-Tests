@@ -18,6 +18,11 @@ class PickleSaver:
         self.info[key].append(data)
         with open(self.filename, 'wb+') as handle:
             pkl.dump(self.info, handle, protocol=pkl.HIGHEST_PROTOCOL)
+
+    def save_int(self, key, data):
+        self.info[key] = (data)
+        with open(self.filename, 'wb+') as handle:
+            pkl.dump(self.info, handle, protocol=pkl.HIGHEST_PROTOCOL)
     
     def save_time_mark(self, time):
         self.info["Time Mark"] = time
