@@ -10,7 +10,7 @@ class PickleSaver:
         self.info = {}
         self.info["Mean Return"] = []
         self.info["Net Params"] = {}
-        self.info["Time Mark"] = 0
+        self.info["Execution Time"] = 0
         self.info["Learning Rate"] = 0
 
     

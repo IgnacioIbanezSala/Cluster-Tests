@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import gymnasium as gym
 import pickle as pkl
 import random
+import time
 from PickleSaver import PickleSaver
 
 SEED = 0
@@ -47,7 +48,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 data_to_dump = {}
 data_to_dump["Mean Return"] = []
-pklsave = PickleSaver("Cartpole_Cross_Entropy","../PickleFiles/")
+pklsave = PickleSaver("Cartpole_Cross_Entropy")
 # Neuronal Net
 model = Sequential([
                     Dense(HIDDEN_SIZE,activation="relu"),
@@ -74,6 +75,7 @@ def CrossEntropyAgent(obs):
 
 S=set()
 n=0
+start = time.time()
 for j in range(5):
 
   # Collect data
@@ -112,6 +114,7 @@ for j in range(5):
   #  pkl.dump(data_to_dump, handle, protocol=pkl.HIGHEST_PROTOCOL)
 
 print(n,len(S))
+pklsave.save_int("Execution Time", time.time()-start)
 model.save("my_model.keras")
 
 #with open('Mean_returns.pickle', 'wb') as handle:
